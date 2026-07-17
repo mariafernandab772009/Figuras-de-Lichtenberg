@@ -7,7 +7,7 @@ import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
 import sys
 
-# Lista das variáveis de entrada
+# Lista de entradas visitadas (agora inicializada vazia e preenchida dinamicamente)
 travelled = [(0,0)]
 branch = 1
 
