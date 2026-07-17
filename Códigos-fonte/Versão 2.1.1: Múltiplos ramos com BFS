@@ -157,19 +157,19 @@ class LeastResistance:
                 continue
 
 # Entradas do usuário
-print('Enter a number of rows, e.g.: 100:')
+print('Insira o número de linhas, e.g.: 100:')
 x_row = int(input())
 
-print('Enter a number of columns, e.g.: 100:')
+print('Insira o número de colunas, e.g.: 100:')
 y_col = int(input())
 
-print('Enter a minimum resistance value, e.g.: 1:')
+print('Insira o valor mínimo de resistência, e.g.: 1:')
 min_res = float(input())
 
-print('Enter a maximum resistance value, e.g.: 200:')
+print('Insira o valor máximo de resistência, e.g.: 200:')
 max_res = float(input())
 
-print('Enter a starting position, e.g.: 0, 0:')
+print('Insira a posição inicial, e.g.: 0, 0:')
 x_input, y_input = input().split(",")
 x_input = int(x_input)
 y_input = int(y_input)
