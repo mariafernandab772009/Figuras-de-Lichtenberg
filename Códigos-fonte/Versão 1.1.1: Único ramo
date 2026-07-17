@@ -54,7 +54,7 @@ class LeastResistance:
                 return self.updateOrder(new_row, new_col)
 
 
-# --- Entradas do Usuário ---
+# Entradas do Usuário 
 # Utilizando os parâmetros recomendados: 100, 100, 1, 200 e 0,0
 print('Insira o número de linhas, e.g.: 100:')
 x_row = int(input())
@@ -76,13 +76,13 @@ y_input = int(y_input.strip())
 # Configura a posição inicial real
 travelled.append((x_input, y_input))
 
-# --- Inicialização do Algoritmo ---
+# Inicialização do Algoritmo
 grid = np.random.randint(min_res, max_res, size=(x_row, y_col))
 current = LeastResistance(grid)
 current.updateOrder(x_input, y_input)
 print(f"Caminho percorrido possui {len(travelled)} passos.")
 
-# --- Animação ---
+# Animação
 empty = np.zeros((x_row, y_col))
 fig, ax = plt.subplots()
 
