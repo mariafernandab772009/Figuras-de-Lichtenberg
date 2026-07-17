@@ -1,4 +1,4 @@
-#CÓDIGO PARA EXPORTAR EM GIF
+# CODIGO EXPORTAR EM GIF
 
 import random
 import matplotlib.pyplot as plt
