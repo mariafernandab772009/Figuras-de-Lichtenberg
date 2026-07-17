@@ -100,6 +100,6 @@ def animate(i):
 ani = animation.FuncAnimation(fig, animate, frames=len(travelled), interval=50, repeat=False)
 
 # SALVA A ANIMAÇÃO
-print("Salvando animação como LeastResistance.gif... Aguarde.")
-ani.save('LeastResistance.gif', writer='pillow', fps=15)
+print("Salvando animação como UnicoRamo.gif... Aguarde.")
+ani.save('UnicoRamo.gif', writer='pillow', fps=15)
 print("Animação salva com sucesso!")
