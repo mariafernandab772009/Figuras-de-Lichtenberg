@@ -1,3 +1,5 @@
+#CÓDIGO PARA EXPORTAR EM GIF
+
 import random
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,7 +7,7 @@ import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
 import sys
 
-# list of visited entries
+# Lista das variáveis de entrada
 travelled = [(0,0)]
 branch = 1
 
@@ -72,7 +74,8 @@ class LeastResistance:
         return True
 
 
-# entradas 
+# Entradas do Usuário 
+# Utilizando os parâmetros recomendados: 100, 100, 1, 200 e 0,0
 print('Insira o número de linhas, e.g.: 100:')
 x_row = int(input())
 
@@ -90,17 +93,17 @@ x_input, y_input = input().split(",")
 x_input = int(x_input)
 y_input = int(y_input)
 
-# algorithm initialization
+# Inicialização do algoritmo
 grid = np.random.randint(min_res, max_res, size=(x_row,y_col))
 current = LeastResistance()
 current.updateOrder(grid, x_input, y_input)
 print(travelled)
 
 
-# creation of empty matrix
+# Criação de uma matriz vazia
 empty = np.zeros((len(grid),len(grid[0])))
 
-#animation function
+# Animação
 def animate(i):
     try:
         print(i)
