@@ -8,7 +8,8 @@ Para isso, utilizou-se códigos já elaborados anteriormente, com algumas pequen
 ## Animações exemplares
  Algumas animações encontram-se presentes na seção **"Animações"** em formato ".gif" desse repositório para exibição do funcionamento do programa.<br/> 
 <br/>Para exemplificar, a seguinte figura em *".jpeg"* ilustra a versão 3.0.1 autoral do algoritmo: uma matriz bidimensional 100x200 com η = 0.5<br/>
-<img width="640" height="480" alt="com anisotropy n=0 5" src="https://github.com/user-attachments/assets/efd9382e-24f8-477f-ab7c-2e41b6b46291" /><br/>
+<img width="640" height="480" alt="com anisotropy n=0 5" src="https://github.com/user-attachments/assets/8e30b53a-8425-4b56-b472-b49c3887ab2c" >
+<br/>
 **Legenda**: Representação do algoritmo percorrendo matriz anisotrópica 
 com η = 0.5, gerando ramificação guiada pelo gradiente elétrico com 
 efeito de perturbações. <br/>
