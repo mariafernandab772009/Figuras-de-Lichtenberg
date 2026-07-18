@@ -1,8 +1,8 @@
 # Figuras de Lichtenberg
 
-O presente repositório busca simular com fidelidade física padrões arborescentes bidimensionais formados durante o rompimento de isolantes elétricos sujeitos a altas tensões, sendo esses denominados Figuras de Lichtenberg, utilizando linguagem Python de programação e softwares de acesso livre.<br/>
+O presente repositório busca simular com fidelidade física padrões arborescentes bidimensionais formados durante o rompimento de isolantes elétricos sujeitos a altas tensões, sendo esses denominados Figuras de Lichtenberg, utilizando linguagem Python de programação.<br/>
 <br/>
-Para isso, utilizou-se códigos já elaborados anteriormente, com algumas pequenas modificações autorais, como: explicação mais acessível sobre o funcionamento do algoritmo, tradução para português brasileiro, e possibilidade da exportação das animações em ".gif" ou em ".mp4".<br/>
+Para isso, utilizou-se códigos já elaborados anteriormente, com algumas pequenas modificações autorais, como: explicação mais acessível sobre o funcionamento do algoritmo em português brasileiro, além da adição da possibilidade de exportar as animações em ".gif".<br/>
 ## Códigos desenvolvidos
  Os algoritmos desenvolvidos estão presentes na seção **"Códigos fonte"**, contendo todas as versões, autorais e não autorais do programa, e essas devidamente traduzidas e aptas a uso próprio do usuário. Ademais, para cada versão para exportação em *".gif"*, há uma subversão 
 para exportação em *".mp4"*.
