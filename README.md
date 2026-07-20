@@ -17,7 +17,7 @@ Observação: todas as figuras presentes nessa seção são de autoria dos criad
 
 ### Autores
  * @mariafernandab772009
- * @
+ * @gadilsoncandido
 ### Créditos
  Os códigos originais devem ser creditados a:<br/>
  * @epa058
