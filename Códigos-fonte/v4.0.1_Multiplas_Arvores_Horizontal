@@ -171,7 +171,7 @@ while True:
                 trees_connected = True
 
     if trees_connected:
-        print(f"Caminho percorrido formado! Árvores encostaram na borda {step}.")
+        print(f"Caminho percorrido formado! Árvores encostaram no passo {step}.")
         break
 
     # Recalcula a equação de Laplace
