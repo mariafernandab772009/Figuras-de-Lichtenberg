@@ -67,7 +67,7 @@ add_neighbors(growPtLeft, candidatesLeft)
 add_neighbors(growPtRight, candidatesRight)
 
 # ---------------------------------------------------------
-# 3. Solver de Laplace Vetorizado Otimizado
+# 3. Solucionador de Laplace Vetorizado Otimizado
 # ---------------------------------------------------------
 def solve_laplace_vectorized(grid, is_growth, iterations=500):
     """
@@ -91,7 +91,7 @@ def solve_laplace_vectorized(grid, is_growth, iterations=500):
     return grid
 
 # Solver Inicial
-print("Inicializando campo de potencial inicial de Laplace...")
+print("Inicializando potencial inicial de Laplace do campo...")
 grid = solve_laplace_vectorized(grid, is_growth, iterations=500)
 
 # ---------------------------------------------------------
