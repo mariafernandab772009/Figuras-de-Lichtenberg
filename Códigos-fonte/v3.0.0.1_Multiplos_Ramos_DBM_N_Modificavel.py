@@ -13,7 +13,7 @@ print('Insira o número de colunas, e.g.: 100:')
 y_col = int(input())
 
 # Pergunta pelo parâmetro eta (expoente de probabilidade do modelo DBM)
-print('Insira o valor para η (expoente governando a relação entre potencial e probabilidade, e.g., 1 or 2):')
+print('Insira o valor para η (expoente governando a relação entre potencial e probabilidade, e.g., 1 ou 2):')
 eta = float(input())
 
 # Gerador de Anisotropia
