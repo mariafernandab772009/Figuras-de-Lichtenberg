@@ -1,1 +1,219 @@
-a
+# EXPORTAR CÓDIGO EM GIF
+
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+# ---------------------------------------------------------
+# 1. Entrada de Parâmetros pelo Usuário
+# ---------------------------------------------------------
+print('Insira o número de linhas, e.g.: 100:')
+x_row = int(input())
+
+print('Insira o número de colunas, e.g.: 100:')
+y_col = int(input())
+
+print('Insira o valor de η (expoente governando a relação entre potencial e probabilidade, e.g., 1 ou 2):')
+eta = float(input())
+
+print('Incluir anisotropias? (Sim / Não):')
+anis = str(input()).strip().upper()
+
+# Inicialização do Grid com valores de ponto flutuante
+if anis == "SIM":
+    grid = np.random.randint(0, 2, size=(x_row, y_col)).astype(float)
+else:
+    grid = np.zeros((x_row, y_col), dtype=float)
+
+# Condições de Contorno (Versão 4.0.1 - Fronteiras Laterais Fixas)
+grid[:, 0] = -10.0
+grid[:, -1] = 10.0
+
+# ---------------------------------------------------------
+# 2. Estruturas de Controle de Crescimento (O(1))
+# ---------------------------------------------------------
+growthLeft = []
+growthRight = []
+
+# Ponto de Origem - Árvore Esquerda (Anodo / Cátodo)
+growPtLeft = (x_row // 2, 0)
+growthLeft.append(growPtLeft)
+
+# Ponto de Origem - Árvore Direita
+growPtRight = (x_row // 2, y_col - 1)
+growthRight.append(growPtRight)
+
+# Matriz booleana global para checagem instantânea de ocupação
+is_growth = np.zeros((x_row, y_col), dtype=bool)
+is_growth[growPtLeft] = True
+is_growth[growPtRight] = True
+
+# Conjuntos de candidatas para cada árvore
+candidatesLeft = set()
+candidatesRight = set()
+
+def add_neighbors(pt, candidate_set):
+    i, j = pt
+    for delta_i, delta_j in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        # Condição de contorno periódica nas linhas (topo/base)
+        new_i = (i + delta_i) % x_row
+        new_j = j + delta_j
+        # Verifica se está dentro dos limites das colunas e não ocupado
+        if 0 <= new_j < y_col and not is_growth[new_i, new_j]:
+            candidate_set.add((new_i, new_j))
+
+add_neighbors(growPtLeft, candidatesLeft)
+add_neighbors(growPtRight, candidatesRight)
+
+# ---------------------------------------------------------
+# 3. Solver de Laplace Vetorizado Otimizado
+# ---------------------------------------------------------
+def solve_laplace_vectorized(grid, is_growth, iterations=500):
+    """
+    Resolve a Equação de Laplace utilizando operações de fatiamento
+    e deslocamento (np.roll) para máxima performance no NumPy.
+    """
+    for _ in range(iterations):
+        # Deslocamentos das vizinhanças
+        left = grid[:, :-2]
+        right = grid[:, 2:]
+        up = np.roll(grid[:, 1:-1], 1, axis=0)
+        down = np.roll(grid[:, 1:-1], -1, axis=0)
+
+        # Média dos vizinhos (Operação Finitas-Diferenças)
+        new_pot = (left + right + up + down) / 4.0
+
+        # Atualiza apenas posições que não são contornos fixos nem pontos de crescimento
+        mask = ~is_growth[:, 1:-1]
+        grid[:, 1:-1][mask] = new_pot[mask]
+
+    return grid
+
+# Solver Inicial
+print("Inicializando campo de potencial inicial de Laplace...")
+grid = solve_laplace_vectorized(grid, is_growth, iterations=500)
+
+# ---------------------------------------------------------
+# 4. Loop de Simulação Intercalado (Alternating Growth)
+# ---------------------------------------------------------
+print("Executando simulação Múltiplas-Árvores com DBM...")
+step = 0
+trees_connected = False
+
+while True:
+    # Alterna a vez de crescimento: Par -> Left, Ímpar -> Right
+    direction = "left" if step % 2 == 0 else "right"
+
+    if direction == "left":
+        possible_sites = [p for p in candidatesLeft if not is_growth[p]]
+        if not possible_sites:
+            break
+
+        # Potenciais do grid nas posições candidatas
+        raw_pot = np.array([grid[i, j] for i, j in possible_sites])
+        min_p = np.min(raw_pot)
+
+        # Ajuste de escala para probabilidades não-negativas
+        shifted = (raw_pot + abs(min_p)) ** eta
+        total_p = np.sum(shifted)
+
+        probs = shifted / total_p if total_p != 0 else np.ones(len(possible_sites)) / len(possible_sites)
+
+        # Seleção estocástica
+        chosen_idx = np.random.choice(len(possible_sites), p=probs)
+        new_pt = possible_sites[chosen_idx]
+
+        # Atualiza a árvore esquerda
+        grid[new_pt] = -10.0
+        growthLeft.append(new_pt)
+        candidatesLeft.remove(new_pt)
+
+    else:  # direction == "right"
+        possible_sites = [p for p in candidatesRight if not is_growth[p]]
+        if not possible_sites:
+            break
+
+        # Potencial invertido para atração da árvore oposta
+        raw_pot = np.array([-grid[i, j] for i, j in possible_sites])
+        min_p = np.min(raw_pot)
+
+        shifted = (raw_pot + abs(min_p)) ** eta
+        total_p = np.sum(shifted)
+
+        probs = shifted / total_p if total_p != 0 else np.ones(len(possible_sites)) / len(possible_sites)
+
+        chosen_idx = np.random.choice(len(possible_sites), p=probs)
+        new_pt = possible_sites[chosen_idx]
+
+        # Atualiza a árvore direita
+        grid[new_pt] = 10.0
+        growthRight.append(new_pt)
+        candidatesRight.remove(new_pt)
+
+    # Marca o ponto recém-criado na matriz booleana
+    is_growth[new_pt] = True
+
+    # Adiciona novos vizinhos ao conjunto correspondente
+    if direction == "left":
+        add_neighbors(new_pt, candidatesLeft)
+    else:
+        add_neighbors(new_pt, candidatesRight)
+
+    # Condição de término: Conexão das duas árvores
+    # Checa se o novo ponto tem vizinhos que pertencem à outra árvore
+    for di, dj in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        ni, nj = (new_pt[0] + di) % x_row, new_pt[1] + dj
+        if 0 <= nj < y_col and is_growth[ni, nj]:
+            if direction == "left" and (ni, nj) in candidatesRight:
+                trees_connected = True
+            elif direction == "right" and (ni, nj) in candidatesLeft:
+                trees_connected = True
+
+    if trees_connected:
+        print(f"Caminho percorrido formado! Árvores encostaram na borda {step}.")
+        break
+
+    # Recalcula a equação de Laplace
+    grid = solve_laplace_vectorized(grid, is_growth, iterations=500)
+    step += 1
+
+# ---------------------------------------------------------
+# 5. Geração e Exportação da Animação em GIF
+# ---------------------------------------------------------
+print("Gerando animação em GIF...")
+Grid_anim = np.zeros((x_row, y_col))
+
+fig, ax = plt.subplots(figsize=(8, 5))
+mat = ax.matshow(Grid_anim, cmap='Blues')
+plt.title(f"Simulação Múltiplas-Árvores com DBM (eta = {eta})")
+
+# O menor número de iterações define a quantidade de quadros
+num_frames = min(len(growthLeft), len(growthRight))
+
+def animate(frame):
+    # Desenha o crescimento da árvore esquerda
+    lx, ly = growthLeft[frame]
+    Grid_anim[lx, ly] = frame + 100
+
+    # Desenha o crescimento da árvore direita
+    rx, ry = growthRight[frame]
+    Grid_anim[rx, ry] = frame + 500
+
+    mat.set_data(Grid_anim)
+    mat.set_clim(vmin=0, vmax=Grid_anim.max())
+    return [mat]
+
+ani = FuncAnimation(
+    fig,
+    animate,
+    frames=num_frames,
+    interval=20,
+    blit=True,
+    repeat=False
+)
+
+# Exportação direta para GIF via Pillow
+ani.save('Multiplas_Arvores_DBM.gif', writer='pillow', fps=30, dpi=100)
+plt.show()
+print("Animação salva com sucesso como 'Multiplas_Arvores_DBM.gif'.")
