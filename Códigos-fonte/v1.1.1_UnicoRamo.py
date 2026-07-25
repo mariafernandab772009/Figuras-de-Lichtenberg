@@ -1,4 +1,5 @@
 # CODIGO EXPORTAR EM GIF
+#
 
 import numpy as np
 import matplotlib.pyplot as plt
